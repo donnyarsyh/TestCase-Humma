@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CatatanDetailPopup from './CatatanDetail'; // pastikan path-nya benar
+<script src="https://kit.fontawesome.com/40389235ff.js" crossorigin="anonymous"></script>
 
 export default function Catatan() {
   const [showPopup, setShowPopup] = useState(false);
@@ -68,6 +69,7 @@ export default function Catatan() {
                   Lihat Detail
                 </button>
                 <button className="bg-red-500 text-white px-3 py-2 rounded-full flex items-center gap-2">
+                  <i class="fa-solid fa-thumbs-up fa-5x"></i>
                   <img src="/images/delete.png" alt="Icon Delete" className="w-5 h-5 object-contain" />
                   Hapus
                 </button>

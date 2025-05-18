@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { usePage } from '@inertiajs/react';
 import Navbar from '../Components/Navbar';
+import CatatanDetailPopup from './CatatanDetail';
 
 export default function Catatan() {
+  const [showPopup, setShowPopup] = useState(false);
   const { props } = usePage();
-  const { user } = props;
+  const { user, catatan } = props;
+
 
   return (
     <div className="min-h-screen bg-blue-50">
       <Navbar />
       <div className="p-6">
-        <p className='mb-2'>Selamat datang, {user.name}!</p>
+        <p className="mb-2">Selamat datang, {user.name}!</p>
         <h1 className="text-xl font-semibold mb-2">Daftar Catatan</h1>
         <hr className="mb-4 border-gray-300 w-40" />
 
@@ -18,67 +21,81 @@ export default function Catatan() {
           <input
             type="text"
             placeholder="Cari disini..."
-            className="border rounded px-4 py-2 w-64" />
+            className="border rounded px-4 py-2 w-64"
+          />
           <button className="bg-blue-600 text-white px-4 py-2 rounded">
             <img src="/images/filter.png" alt="Filter" className="w-5 h-5 object-contain" />
           </button>
         </div>
-        <div class="overflow-x-auto bg-white rounded-lg w-full">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-blue-600 text-white">
+
+        <div className="overflow-x-auto bg-white rounded-lg w-full">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-blue-600 text-white">
               <tr>
-                <th scope="col" class="py-3 sm:px-6 text-left">
+                <th scope="col" className="py-3 sm:px-6 text-left">
                   No.
                 </th>
-                <th scope="col" class="py-3 px-4 sm:px-6 text-left">
+                <th scope="col" className="py-3 px-4 sm:px-6 text-left">
                   Nama Pengguna
                 </th>
-                <th scope="col" class="py-3 px-4 sm:px-6 text-left">
+                <th scope="col" className="py-3 px-4 sm:px-6 text-left">
                   Judul
                 </th>
-                <th scope="col" class="py-3 px-4 sm:px-6 text-left text-center">
+                <th scope="col" className="py-3 px-4 sm:px-6 text-left text-center">
                   Aksi
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
-
-              <tr class="bg-white hover:bg-gray-100 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">1</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">Donny Arsy
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">Senam Sehat</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
-                  <form action="#"
-                    method="POST" class="inline">
-                    <button type="submit"
-                      class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
-                      onclick="return confirm('Are you sure you want to delete this penginapan?')">
-                      <i class="fa-solid fa-trash-can"></i> Detail
-                    </button>
-                  </form>
-                  <a href="" class="mx-2"> </a>
-                  <a href=""
-                    class="text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:ring-orange-400 font-medium rounded text-sm px-3 py-1.5 focus:outline-none">
-                    <i class="fa-solid fa-pencil"></i> Ubah
-                  </a>
-                  <a href="" class="mx-2"> </a>
-                  <button type="submit"
-                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
-                    onclick="return confirm('Are you sure you want to delete this penginapan?')">
-                    <i class="fa-solid fa-trash-can"></i> Hapus
-                  </button>
-                </td>
-              </tr>
+            <tbody className="divide-y divide-gray-200">
+              {catatan && catatan.length > 0 ? (
+                catatan.map((item, index) => (
+                  <tr key={item.idcatatan} className="bg-white hover:bg-gray-100 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{index + 1}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{item.judul}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                      <button
+                        onClick={() => setShowPopup(true)}
+                        className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
+                      >
+                        Detail
+                      </button>
+                      <button
+                        className="ml-2 text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:ring-orange-400 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
+                      >
+                        Ubah
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm('Are you sure you want to delete this catatan?')) {
+                            alert('Fitur hapus belum diimplementasikan.');
+                          }
+                        }}
+                        className="ml-2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
+                    Belum ada catatan.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
-      </div >
-    </div >
+
+        {showPopup && <CatatanDetailPopup onClose={() => setShowPopup(false)} />}
+      </div>
+    </div>
   );
 }
 

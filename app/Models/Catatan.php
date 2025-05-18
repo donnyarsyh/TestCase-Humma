@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Catatan extends Model
 {
     //
-    protected $primaryKey = 'idcatatan'; // Menentukan primary key
+    protected $table = 'catatan';
+    protected $primaryKey = 'idcatatan';
 
     protected $fillable = [
         'user_id',
@@ -17,9 +18,6 @@ class Catatan extends Model
         'gambar',
     ];
 
-    /**
-     * Relasi dengan model User
-     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

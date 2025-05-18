@@ -13,10 +13,17 @@ class CatatanController extends Controller
     public function index()
     {
         $user = Auth::user();
+        // $catatan = Catatan::where('user_id', $user->id)
+        //     ->select('idcatatan', 'judul', 'deskripsi', 'tgl', 'gambar')
+        //     ->get();
+        $catatan = Catatan::select('idcatatan', 'user_id', 'judul', 'deskripsi', 'tgl', 'gambar')
+            ->get();
+
         return Inertia::render('Catatan', [
             'user' => [
                 'name' => $user->name,
             ],
+            'catatan' => $catatan,
         ]);
     }
 }

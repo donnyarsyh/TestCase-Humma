@@ -20,5 +20,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@gmail.com',
             'password' => bcrypt('password'),
         ]);
+        Seeder::call([
+            SeederCatatan::class,
+        ]);
     }
 }

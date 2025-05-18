@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CatatanDetailPopup from './CatatanDetail';
-import Navbar from '../components/Navbar'; // pastikan path benar
+import Navbar from '../Components/Navbar'; // pastikan path benar
 
 export default function Catatan() {
   const [showPopup, setShowPopup] = useState(false);

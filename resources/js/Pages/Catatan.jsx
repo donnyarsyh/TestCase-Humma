@@ -74,11 +74,11 @@ export default function Catatan() {
                 catatan.map((item, index) => (
                   <tr key={item.idcatatan} className="bg-white hover:bg-gray-100 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{index + 1}</div>
+                      <div className="font-medium text-gray-900">{index + 1}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{item.judul}</div>
+                      <div className="text-gray-900">{item.judul}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
                       <button

@@ -26,4 +26,17 @@ class CatatanController extends Controller
             'catatan' => $catatan,
         ]);
     }
+
+    public function destroy($idcatatan)
+    {
+        // Cari catatan berdasarkan idcatatan dan pastikan milik pengguna yang login
+        $catatan = Catatan::where('idcatatan', $idcatatan)
+            ->firstOrFail();
+
+        // Hapus catatan
+        $catatan->delete();
+
+        // Redirect kembali ke halaman catatan dengan pesan sukses
+        return redirect()->route('catatan')->with('message', 'Catatan berhasil dihapus.');
+    }
 }

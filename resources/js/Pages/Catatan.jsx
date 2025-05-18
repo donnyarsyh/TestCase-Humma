@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
-import { usePage } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { usePage, router } from '@inertiajs/react';
 import Navbar from '../Components/Navbar';
 import CatatanDetailPopup from './CatatanDetail';
 
 export default function Catatan() {
   const [showPopup, setShowPopup] = useState(false);
   const { props } = usePage();
-  const { user, catatan } = props;
+  const { user, catatan, flash } = props;
 
+  // Menangani pesan flash dengan aman
+  useEffect(() => {
+    if (flash?.message) {
+      alert(flash.message);
+    }
+    if (flash?.error) {
+      alert(flash.error);
+    }
+  }, [flash]);
+
+  // Fungsi untuk menghapus catatan
+  const handleDelete = (idcatatan) => {
+    if (confirm('Are you sure you want to delete this catatan?')) {
+      router.delete(route('catatan.destroy', idcatatan), {
+        onSuccess: () => {
+          console.log('Catatan berhasil dihapus');
+        },
+        onError: (errors) => {
+          alert('Gagal menghapus catatan: ' + (errors.message || 'Terjadi kesalahan.'));
+        },
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -70,11 +93,7 @@ export default function Catatan() {
                         Ubah
                       </button>
                       <button
-                        onClick={() => {
-                          if (confirm('Are you sure you want to delete this catatan?')) {
-                            alert('Fitur hapus belum diimplementasikan.');
-                          }
-                        }}
+                        onClick={() => handleDelete(item.idcatatan)}
                         className="ml-2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
                       >
                         Hapus

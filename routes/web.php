@@ -14,10 +14,9 @@ Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 Route::get('/catatan', [CatatanController::class, 'index'])
     ->middleware(['auth'])
     ->name('catatan');
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::delete('/catatan/{idcatatan}', [CatatanController::class, 'destroy'])
+    ->middleware(['auth'])
+    ->name('catatan.destroy');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

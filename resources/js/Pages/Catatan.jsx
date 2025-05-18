@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar';
 import CatatanDetailPopup from './CatatanDetail';
 
 export default function Catatan() {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(null);
   const { props } = usePage();
   const { user, catatan, flash } = props;
 
@@ -82,7 +82,7 @@ export default function Catatan() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
                       <button
-                        onClick={() => setShowPopup(true)}
+                        onClick={() => setShowPopup(item)} // Kirim objek item ke state
                         className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
                       >
                         Detail
@@ -111,8 +111,12 @@ export default function Catatan() {
             </tbody>
           </table>
         </div>
-
-        {showPopup && <CatatanDetailPopup onClose={() => setShowPopup(false)} />}
+        {showPopup && (
+          <CatatanDetailPopup
+            catatan={showPopup} // Kirim item sebagai prop catatan
+            onClose={() => setShowPopup(null)}
+          />
+        )}
       </div>
     </div>
   );

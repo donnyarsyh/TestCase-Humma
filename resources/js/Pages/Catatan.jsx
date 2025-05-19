@@ -13,13 +13,23 @@ export default function Catatan() {
   const [showPopup, setShowPopup] = useState(null);
   // State untuk flash message
   const [flashMessage, setFlashMessage] = useState(null);
+  // Tambah state sort
+  const [sortKey, setSortKey] = useState('');
 
-  // Filter data berdasarkan judul dan user_name
-  const filteredCatatan = catatan.filter(
-    (item) =>
-      item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+const filteredCatatan = catatan.filter(
+  (item) =>
+    item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+// Urutkan catatan setelah disaring
+const sortedCatatan = [...filteredCatatan].sort((a, b) => {
+  if (sortKey === 'nama') return a.user_name.localeCompare(b.user_name);
+  if (sortKey === 'judul') return a.judul.localeCompare(b.judul);
+  return 0;
+});
+
 
   // Handler untuk perubahan input pencarian
   const handleSearch = (e) => {
@@ -74,18 +84,28 @@ export default function Catatan() {
         <p className="mb-2">Selamat datang, {user.name}!</p>
         <div className="flex justify-between items-center mb-3">
           <h1 className="text-xl font-semibold mb-2">Daftar Catatan</h1>
-          <input
-            type="text"
-            placeholder="Cari disini..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="border rounded px-4 py-2 w-64 mx-6"
-          />
+          <div className="flex items-center gap-3">
+            <select
+              value={sortKey}
+              onChange={(e) => setSortKey(e.target.value)}
+              className="border rounded px-3 py-2 text-sm"
+            >
+              <option value="">Urutkan </option>
+              <option value="nama">Nama A - Z</option>
+              <option value="judul">Judul A - Z</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Cari disini..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="border rounded px-4 py-2 w-64"
+            />
+          </div>
         </div>
-
         <div className="overflow-x-auto bg-white rounded-lg w-full">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-blue-600 text-white">
+            <thead style={{ backgroundColor: '#27548A' }} className="text-white">
               <tr>
                 <th scope="col" className="py-3 px-4 sm:px-6 text-left">
                   No.
@@ -102,8 +122,8 @@ export default function Catatan() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredCatatan.length > 0 ? (
-                filteredCatatan.map((item, index) => (
+              {sortedCatatan.length > 0 ? (
+                sortedCatatan.map((item, index) => (
                   <tr
                     key={item.idcatatan}
                     className="bg-white hover:bg-gray-100 transition-colors"
@@ -122,11 +142,11 @@ export default function Catatan() {
                       >
                         Detail
                       </button>
-                      <button
+                      {/* <button
                         className="ml-2 text-white bg-orange-400 hover:bg-orange-500 focus:ring-4 focus:ring-orange-400 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
                       >
                         Ubah
-                      </button>
+                      </button> */}
                       <button
                         onClick={() => handleDelete(item.idcatatan)}
                         className="ml-2 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"

@@ -7,7 +7,7 @@ export default function Login() {
     password: '',
     showPassword: false,
   });
-  const { errors } = usePage().props; // Mendapatkan error dari Inertia
+  const { errors } = usePage().props;
 
   const handleChange = (e) => {
     setFormData({
@@ -26,8 +26,7 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     router.post('/login', formData, {
-      onError: (errors) => {
-        // Optional: Tambahan penanganan error di sisi klien
+    onError: (errors) => {
         console.log('Login gagal:', errors);
       },
     });
@@ -36,13 +35,13 @@ export default function Login() {
   return (
     <div className="flex h-screen">
       {/* Kiri: Ilustrasi */}
-      <div className="w-1/2 bg-blue-800 flex justify-center items-center">
+      <div className="w-1/2 flex justify-center items-center" style={{ backgroundColor: '#27548A' }}>
         <img src="/images/login.png" alt="Ilustrasi Login" className="w-2/3" />
       </div>
 
       {/* Kanan: Form Login */}
       <div className="w-1/2 bg-blue-50 flex flex-col justify-center items-center">
-        <h2 className="text-3xl font-bold mb-6">Login</h2>
+        <h2 className="text-3xl font-bold mb-6 text-[#27548A]">Login</h2>
 
         <form className="w-2/3 max-w-md" onSubmit={handleLogin}>
           <div className="mb-4">
@@ -52,10 +51,10 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500' : 'border-grey-300'}`}
+              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
@@ -66,7 +65,7 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className={`w-full p-3 rounded border ${errors.password ? 'border-red-500' : 'border-grey-300'}`}
+              className={`w-full p-3 rounded border ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
             />
             <span
               className="absolute right-3 top-3 text-gray-500 cursor-pointer"
@@ -74,15 +73,14 @@ export default function Login() {
             >
               {formData.showPassword ? '🙈' : '👁️'}
             </span>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
-
-          {/* <div className="text-right text-sm text-blue-700 mb-4 cursor-pointer">
-            Lupa Password?
-          </div> */}
-
+          
           <button
             type="submit"
-            className="mt-4 w-full bg-yellow-600 hover:bg-yellow-700 text-white p-3 rounded font-bold"
+            className="mt-4 w-full bg-[#DDA853] hover:bg-[#E79A1E] text-white p-3 rounded font-bold transition"
           >
             Masuk
           </button>

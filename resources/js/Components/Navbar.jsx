@@ -26,18 +26,20 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="flex items-center justify-between px-6 py-3 border-b border-blue-300">
+      <div className="flex items-center justify-between px-6 py-3 border-b style={{ borderBottomColor: '#27548A' }}">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img src="/images/notepad.png" alt="Logo" className="w-6 h-6 object-contain" />
-          <span className="text-xl font-semibold text-blue-700">
-            Share<span className="text-orange-500">Notes</span>
+          <span style={{ color: '#27548A'}}>
+            Share
+            <span style={{ color: '#DDA853'}}>
+              Notes</span>
           </span>
         </div>
 
         {/* Tombol Burger untuk Mobile/Tablet */}
         <button
-          className="md:hidden text-blue-700 focus:outline-none"
+          className="md:hidden focus:outline-none" style={{ color: '#27548A' }}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -47,27 +49,43 @@ export default function Navbar() {
         </button>
 
         {/* Menu Utama untuk Desktop */}
-        <div className="hidden md:flex bg-blue-800 rounded-full px-4 py-2 shadow-lg gap-6 items-center">
+        <div className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center" style={{ backgroundColor: '#27548A' }}>
           <button
             onClick={() => {
               setActive("catatan");
               router.visit("/catatan");
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === "catatan" ? "bg-orange-500 text-white" : "text-white hover:bg-orange-600 hover:text-white"}`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${
+              active === "catatan"
+                ? "text-white"
+                : "text-white hover:text-white hover:bg-[#DDA853]"
+            }`}
+            style={{
+              backgroundColor: active === "catatan" ? "#DDA853" : "transparent",
+            }}
           >
             <img src="/images/catatan.png" alt="Catatan" className="w-5 h-5 object-contain" />
             Catatan
           </button>
+
           <button
             onClick={() => {
               setActive("akun");
-              router.visit("#");
+              router.visit("");
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === "akun" ? "bg-orange-500 text-white" : "text-white hover:bg-orange-600 hover:text-white"}`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${
+              active === "akun"
+                ? "text-white"
+                : "text-white hover:text-white hover:bg-[#DDA853]"
+            }`}
+            style={{
+              backgroundColor: active === "akun" ? "#DDA853" : "transparent",
+            }}
           >
             <img src="/images/user.png" alt="Data Akun" className="w-5 h-5 object-contain" />
             Data Akun
           </button>
+
         </div>
 
         {/* Tombol Logout untuk Desktop */}
@@ -82,7 +100,7 @@ export default function Navbar() {
 
       {/* Menu Mobile/Tablet (Tampil saat burger diklik) */}
       {isMenuOpen && (
-        <div className="md:hidden bg-blue-800 px-6 py-4 flex flex-col gap-4">
+        <div className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center" style={{ backgroundColor: '#27548A' }}>
           <button
             onClick={() => {
               setActive("catatan");

@@ -76,7 +76,7 @@ export default function Catatan() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900">{index + 1}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{item.user_name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-gray-900">{item.judul}</div>
                     </td>

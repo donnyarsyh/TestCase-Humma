@@ -4,17 +4,38 @@ import Navbar from '../Components/Navbar';
 import CatatanDetailPopup from './CatatanDetail';
 
 export default function Catatan() {
-  const [showPopup, setShowPopup] = useState(null);
   const { props } = usePage();
   const { user, catatan, flash } = props;
 
-  // Menangani pesan flash dengan aman
+  // State untuk input pencarian
+  const [searchTerm, setSearchTerm] = useState('');
+  // State untuk popup
+  const [showPopup, setShowPopup] = useState(null);
+  // State untuk flash message
+  const [flashMessage, setFlashMessage] = useState(null);
+
+  // Filter data berdasarkan judul dan user_name
+  const filteredCatatan = catatan.filter(
+    (item) =>
+      item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Handler untuk perubahan input pencarian
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Menangani pesan flash
   useEffect(() => {
-    if (flash?.message) {
-      alert(flash.message);
-    }
-    if (flash?.error) {
-      alert(flash.error);
+    if (flash?.message || flash?.error) {
+      setFlashMessage({
+        type: flash.error ? 'error' : 'success',
+        message: flash.message || flash.error,
+      });
+      // Hilangkan pesan setelah 3 detik
+      const timer = setTimeout(() => setFlashMessage(null), 3000);
+      return () => clearTimeout(timer);
     }
   }, [flash]);
 
@@ -23,10 +44,13 @@ export default function Catatan() {
     if (confirm('Are you sure you want to delete this catatan?')) {
       router.delete(route('catatan.destroy', idcatatan), {
         onSuccess: () => {
-          console.log('Catatan berhasil dihapus');
+          setFlashMessage({ type: 'success', message: 'Catatan berhasil dihapus' });
         },
         onError: (errors) => {
-          alert('Gagal menghapus catatan: ' + (errors.message || 'Terjadi kesalahan.'));
+          setFlashMessage({
+            type: 'error',
+            message: errors.message || 'Gagal menghapus catatan.',
+          });
         },
       });
     }
@@ -36,26 +60,34 @@ export default function Catatan() {
     <div className="min-h-screen bg-blue-50">
       <Navbar />
       <div className="p-6">
-        <p className="mb-2">Selamat datang, {user.name}!</p>
-        <h1 className="text-xl font-semibold mb-2">Daftar Catatan</h1>
-        <hr className="mb-4 border-gray-300 w-40" />
+        {/* Flash Message */}
+        {flashMessage && (
+          <div
+            className={`fixed top-4 right-4 p-4 rounded shadow-lg text-white ${
+              flashMessage.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            }`}
+          >
+            {flashMessage.message}
+          </div>
+        )}
 
-        <div className="flex justify-end mb-4 gap-2">
+        <p className="mb-2">Selamat datang, {user.name}!</p>
+        <div className="flex justify-between items-center mb-3">
+          <h1 className="text-xl font-semibold mb-2">Daftar Catatan</h1>
           <input
             type="text"
             placeholder="Cari disini..."
-            className="border rounded px-4 py-2 w-64"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="border rounded px-4 py-2 w-64 mx-6"
           />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded">
-            <img src="/images/filter.png" alt="Filter" className="w-5 h-5 object-contain" />
-          </button>
         </div>
 
         <div className="overflow-x-auto bg-white rounded-lg w-full">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-blue-600 text-white">
               <tr>
-                <th scope="col" className="py-3 sm:px-6 text-left">
+                <th scope="col" className="py-3 px-4 sm:px-6 text-left">
                   No.
                 </th>
                 <th scope="col" className="py-3 px-4 sm:px-6 text-left">
@@ -64,15 +96,18 @@ export default function Catatan() {
                 <th scope="col" className="py-3 px-4 sm:px-6 text-left">
                   Judul
                 </th>
-                <th scope="col" className="py-3 px-4 sm:px-6 text-left text-center">
+                <th scope="col" className="py-3 px-4 sm:px-6 text-center">
                   Aksi
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {catatan && catatan.length > 0 ? (
-                catatan.map((item, index) => (
-                  <tr key={item.idcatatan} className="bg-white hover:bg-gray-100 transition-colors">
+              {filteredCatatan.length > 0 ? (
+                filteredCatatan.map((item, index) => (
+                  <tr
+                    key={item.idcatatan}
+                    className="bg-white hover:bg-gray-100 transition-colors"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-medium text-gray-900">{index + 1}</div>
                     </td>
@@ -82,7 +117,7 @@ export default function Catatan() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
                       <button
-                        onClick={() => setShowPopup(item)} // Kirim objek item ke state
+                        onClick={() => setShowPopup(item)}
                         className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-sm px-3 py-1.5 focus:outline-none"
                       >
                         Detail
@@ -103,8 +138,11 @@ export default function Catatan() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
-                    Belum ada catatan.
+                  <td
+                    colSpan="4"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
+                    Belum ada catatan yang cocok.
                   </td>
                 </tr>
               )}
@@ -113,7 +151,7 @@ export default function Catatan() {
         </div>
         {showPopup && (
           <CatatanDetailPopup
-            catatan={showPopup} // Kirim item sebagai prop catatan
+            catatan={showPopup}
             onClose={() => setShowPopup(null)}
           />
         )}

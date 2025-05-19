@@ -20,18 +20,33 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input
         $credentials = $request->validate([
-            'email' => ['required'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
+        // Coba login
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return Inertia::location(route('catatan')); // Redirect ke dashboard
+            // Periksa role user
+            if (Auth::user()->role === 'admin') {
+                $request->session()->regenerate();
+                return Inertia::location(route('catatan')); // Redirect ke halaman catatan
+            } else {
+                // Logout user jika bukan admin
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return Redirect::back()->withErrors([
+                    'email' => 'Akses ditolak. Hanya admin yang dapat login.',
+                ]);
+            }
         }
 
+        // Jika login gagal
         return Redirect::back()->withErrors([
-            'username' => 'Username atau password salah.',
+            'email' => 'Email atau password salah.',
         ]);
     }
 

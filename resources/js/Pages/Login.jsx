@@ -52,7 +52,7 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500 bg-red' : 'border-red-200'}`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.username}</p>

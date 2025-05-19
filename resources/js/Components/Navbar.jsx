@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { router, usePage } from '@inertiajs/react';
 
 export default function Navbar() {
-  const [active, setActive] = useState("catatan");
+  const { url } = usePage();
+  const [active, setActive] = useState('catatan');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Sinkronkan state active dengan URL saat ini
+  useEffect(() => {
+    if (url.includes('/datauser')) {
+      setActive('datauser');
+    } else if (url.includes('/catatan')) {
+      setActive('catatan');
+    }
+  }, [url]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -26,42 +36,58 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="flex items-center justify-between px-6 py-3 border-b style={{ borderBottomColor: '#27548A' }}">
+      <div
+        className="flex items-center justify-between px-6 py-3"
+        style={{ borderBottomColor: '#27548A' }}
+      >
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img src="/images/notepad.png" alt="Logo" className="w-6 h-6 object-contain" />
-          <span style={{ color: '#27548A'}}>
+          <span style={{ color: '#27548A' }}>
             Share
-            <span style={{ color: '#DDA853'}}>
-              Notes</span>
+            <span style={{ color: '#DDA853' }}>Notes</span>
           </span>
         </div>
 
         {/* Tombol Burger untuk Mobile/Tablet */}
         <button
-          className="md:hidden focus:outline-none" style={{ color: '#27548A' }}
+          className="md:hidden focus:outline-none"
+          style={{ color: '#27548A' }}
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d={isMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+            />
           </svg>
         </button>
 
         {/* Menu Utama untuk Desktop */}
-        <div className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center" style={{ backgroundColor: '#27548A' }}>
+        <div
+          className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center"
+          style={{ backgroundColor: '#27548A' }}
+        >
           <button
             onClick={() => {
-              setActive("catatan");
-              router.visit("/catatan");
+              setActive('catatan');
+              router.visit('/catatan');
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${
-              active === "catatan"
-                ? "text-white"
-                : "text-white hover:text-white hover:bg-[#DDA853]"
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === 'catatan'
+                ? 'text-white'
+                : 'text-white hover:text-white hover:bg-[#DDA853]'
+              }`}
             style={{
-              backgroundColor: active === "catatan" ? "#DDA853" : "transparent",
+              backgroundColor: active === 'catatan' ? '#DDA853' : 'transparent',
             }}
           >
             <img src="/images/catatan.png" alt="Catatan" className="w-5 h-5 object-contain" />
@@ -70,22 +96,20 @@ export default function Navbar() {
 
           <button
             onClick={() => {
-              setActive("akun");
-              router.visit("");
+              setActive('datauser');
+              router.visit('/datauser');
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${
-              active === "akun"
-                ? "text-white"
-                : "text-white hover:text-white hover:bg-[#DDA853]"
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === 'datauser'
+                ? 'text-white'
+                : 'text-white hover:text-white hover:bg-[#DDA853]'
+              }`}
             style={{
-              backgroundColor: active === "akun" ? "#DDA853" : "transparent",
+              backgroundColor: active === 'datauser' ? '#DDA853' : 'transparent',
             }}
           >
-            <img src="/images/user.png" alt="Data Akun" className="w-5 h-5 object-contain" />
-            Data Akun
+            <img src="/images/user.png" alt="Data Pengguna" className="w-5 h-5 object-contain" />
+            Data Pengguna
           </button>
-
         </div>
 
         {/* Tombol Logout untuk Desktop */}
@@ -98,30 +122,38 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Menu Mobile/Tablet (Tampil saat burger diklik) */}
+      {/* Menu Mobile/Tablet */}
       {isMenuOpen && (
-        <div className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center" style={{ backgroundColor: '#27548A' }}>
+        <div
+          className="md:hidden flex flex-col px-4 py-2 gap-2 bg-[#27548A]"
+        >
           <button
             onClick={() => {
-              setActive("catatan");
-              router.visit("/catatan");
+              setActive('catatan');
+              router.visit('/catatan');
               setIsMenuOpen(false);
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === "catatan" ? "bg-orange-500 text-white" : "text-white hover:bg-orange-600 hover:text-white"}`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === 'catatan'
+                ? 'bg-[#DDA853] text-white'
+                : 'text-white hover:bg-[#DDA853] hover:text-white'
+              }`}
           >
             <img src="/images/catatan.png" alt="Catatan" className="w-5 h-5 object-contain" />
             Catatan
           </button>
           <button
             onClick={() => {
-              setActive("akun");
-              router.visit("#");
+              setActive('datauser');
+              router.visit('/datauser');
               setIsMenuOpen(false);
             }}
-            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === "akun" ? "bg-orange-500 text-white" : "text-white hover:bg-orange-600 hover:text-white"}`}
+            className={`flex items-center gap-2 px-4 py-2 transition rounded-full ${active === 'datauser'
+                ? 'bg-[#DDA853] text-white'
+                : 'text-white hover:bg-[#DDA853] hover:text-white'
+              }`}
           >
-            <img src="/images/user.png" alt="Data Akun" className="w-5 h-5 object-contain" />
-            Data Akun
+            <img src="/images/user.png" alt="Data Pengguna" className="w-5 h-5 object-contain" />
+            Data Pengguna
           </button>
           <button
             onClick={handleLogout}

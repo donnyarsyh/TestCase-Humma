@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CatatanController;
+use App\Http\Controllers\DataUserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,13 @@ Route::get('/catatan', [CatatanController::class, 'index'])
 Route::delete('/catatan/{idcatatan}', [CatatanController::class, 'destroy'])
     ->middleware(['auth'])
     ->name('catatan.destroy');
+
+Route::get('/datauser', [DataUserController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('datauser');
+Route::delete('/users/{id}', [DataUserController::class, 'destroy'])
+    ->name('users.destroy')
+    ->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

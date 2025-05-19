@@ -52,7 +52,7 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500 bg-red' : 'border-red-200'}`}
+              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500' : 'border-grey-300'}`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.username}</p>
@@ -66,7 +66,7 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className={`w-full p-3 rounded border ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+              className={`w-full p-3 rounded border ${errors.password ? 'border-red-500' : 'border-grey-300'}`}
             />
             <span
               className="absolute right-3 top-3 text-gray-500 cursor-pointer"
@@ -76,13 +76,13 @@ export default function Login() {
             </span>
           </div>
 
-          <div className="text-right text-sm text-blue-700 mb-4 cursor-pointer">
+          {/* <div className="text-right text-sm text-blue-700 mb-4 cursor-pointer">
             Lupa Password?
-          </div>
+          </div> */}
 
           <button
             type="submit"
-            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white p-3 rounded font-bold"
+            className="mt-4 w-full bg-yellow-600 hover:bg-yellow-700 text-white p-3 rounded font-bold"
           >
             Masuk
           </button>

@@ -1,0 +1,16 @@
+.bg_halaman {
+  background-color: #EFF6FF;
+  min-height: 100vh;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  height: auto;
+}
+
+.data_pengguna{
+  font-weight: bold;
+  font-size: large;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,67 @@
+.wrapper_navbar {
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 30px;
+  background-color: #ffffff;
+  position: relative;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.icon_desktop {
+  display: block;
+}
+.icon_mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .icon_desktop {
+    display: none;
+  }
+  .icon_mobile {
+    display: block;
+  }
+}
+
+
+.tombol_tengah {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  
+}
+
+.btn_navbar_1,
+.btn_navbar_2 {
+  padding: 10px 20px;
+  border: none;
+  background-color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  
+}
+
+.btn_navbar_1{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+.btn_navbar_2{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.btn_navbar_1:hover,
+.btn_navbar_2:hover,
+.btn_navbar_1.active,
+.btn_navbar_2.active {
+    background-color: #27548a;
+    color: #ffffff;
+}

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { router, usePage } from '@inertiajs/react';
+import '../../css/styles/Navbar.css';
+import logo_desktop from '../../assets/Logo Aplikasi.svg';
+import logo_mobile from '../../assets/notepad 1.svg';
 
 export default function Navbar() {
   const { url } = usePage();
@@ -41,13 +44,10 @@ export default function Navbar() {
         style={{ borderBottomColor: '#27548A' }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <img src="/images/notepad.png" alt="Logo" className="w-6 h-6 object-contain" />
-          <span style={{ color: '#27548A' }}>
-            Share
-            <span style={{ color: '#DDA853' }}>Notes</span>
-          </span>
-        </div>
+        <div className="logo">
+        <img src={logo_desktop} alt='Logo Desktop' className='icon_desktop'/>
+        <img src={logo_mobile} alt='Logo Mobile' className='icon_mobile'/>
+      </div>
 
         {/* Tombol Burger untuk Mobile/Tablet */}
         <button
@@ -168,3 +168,48 @@ export default function Navbar() {
     </nav>
   );
 }
+/*import React from 'react';
+import '../../css/styles/Navbar.css';
+import '../../css/styles/Tombol.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+import logo_desktop from '../../assets/Logo Aplikasi.svg';
+import logo_mobile from '../../assets/notepad 1.svg';
+import icon_keluar from '../../assets/sign-out-alt 1.svg';
+import icon_catatan from '../../assets/icon_project.svg';
+import icon_akun from '../../assets/user (5).svg';
+
+function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <img src={logo_desktop} alt='Logo Desktop' className='logo-desktop'/>
+        <img src={logo_mobile} alt='Logo Mobile' className='logo-mobile'/>
+      </div>
+      <div className="center-buttons">
+      <div className='tombol_wrapper'>
+        <button className={`tombol_navbar ${isActive('/catatan') ? 'active' : ''}`}
+        onClick={() => navigate('/catatan')}>
+        <img src={icon_catatan} alt="Catatan" />
+        <span>Catatan</span>
+      </button>
+      <button className={`tombol_navbar ${isActive('/akun') ? 'active' : ''}`}
+        onClick={() => navigate('/akun')}>
+        <img src={icon_akun} alt="Akun" />
+        <span>Akun</span>
+      </button>
+      </div>
+      </div>
+      <div>
+        <button className="tombol_keluar" onClick={() => alert('Logout berhasil!')}><img src={icon_keluar} className="icon_keluar" /></button>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;
+*/

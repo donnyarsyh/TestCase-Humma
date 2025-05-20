@@ -1,0 +1,64 @@
+.wrapper_tabel {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 420px;
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.tabel_pengguna {
+  width: 100%;
+  min-width: min-content;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+  margin: 0px;
+  table-layout: auto;
+}
+
+.tabel_pengguna th,
+.tabel_pengguna td {
+  padding: 13px 25px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabel_pengguna thead {
+  background-color: #27548a;
+  color: white;
+}
+
+
+.tabel_pengguna tbody {
+  background-color: #ffffff;
+  color: black;
+  margin-top: 2px;
+}
+
+.tabel_pengguna thead th:last-child {
+  text-align: center;
+}
+
+.tabel_pengguna tbody td:last-child {
+  text-align: center;
+}
+
+.tabel_pengguna tbody tr:hover {
+  background-color: #D8D8D8;
+}
+
+@media (max-width: 480px) {
+  .tabel_pengguna th,
+  .tabel_pengguna td {
+    padding: 10px 15px;
+    font-size: 14px;
+    white-space: nowrap ;
+  }
+
+  .wrapper_tabel {
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+}

@@ -84,7 +84,7 @@ export default function Catatan() {
             <select
               value={sortKey}
               onChange={(e) => setSortKey(e.target.value)}
-              className="border rounded px-3 py-2 text-sm"
+              className="border rounded px-3 py-2 text-sm w-40"
             >
               <option value="">Urutkan </option>
               <option value="nama">Nama A - Z</option>

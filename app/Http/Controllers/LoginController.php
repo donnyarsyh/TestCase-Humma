@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginFormRequest;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -10,54 +12,42 @@ use Inertia\Inertia;
 class LoginController extends Controller
 {
     //
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function create()
     {
         return Inertia::render('Login');
     }
 
-    /**
-     * Menangani proses autentikasi.
-     */
-    public function store(Request $request)
+    public function store(LoginFormRequest $request)
     {
-        // Validasi input
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        // Coba login
-        if (Auth::attempt($credentials)) {
-            // Periksa role user
-            if (Auth::user()->role === 'admin') {
+        if ($this->authService->attemptLogin($credentials)) {
+            if ($this->authService->isAdmin()) {
                 $request->session()->regenerate();
-                return Inertia::location(route('catatan')); // Redirect ke halaman catatan
-            } else {
-                // Logout user jika bukan admin
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return Redirect::back()->withErrors([
-                    'email' => 'Akses ditolak. Hanya admin yang dapat login.',
-                ]);
+                return Inertia::location(route('catatan'));
             }
+
+            $this->authService->logout($request);
+            return Redirect::back()->withErrors([
+                'email' => 'Akses ditolak. Hanya admin yang dapat login.',
+            ]);
         }
 
-        // Jika login gagal
         return Redirect::back()->withErrors([
             'email' => 'Email atau password salah.',
         ]);
     }
 
-    /**
-     * Logout pengguna.
-     */
     public function destroy(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $this->authService->logout($request);
         return Inertia::location(route('login'));
     }
 }

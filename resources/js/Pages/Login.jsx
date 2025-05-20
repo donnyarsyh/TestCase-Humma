@@ -36,7 +36,7 @@ export default function Login() {
     <div className="flex h-screen">
       {/* Kiri: Ilustrasi */}
       <div className="w-1/2 flex justify-center items-center" style={{ backgroundColor: '#27548A' }}>
-        <img src="/images/login.png" alt="Ilustrasi Login" className="w-2/3" />
+        <img src="/images/bg-login.png" alt="Ilustrasi Login" className="w-3/3" />
       </div>
 
       {/* Kanan: Form Login */}

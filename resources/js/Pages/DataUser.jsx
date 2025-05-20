@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import Navbar from '../Components/Navbar';
 
@@ -8,6 +8,18 @@ export default function DataUser() {
 
     // State untuk flash message
     const [flashMessage, setFlashMessage] = useState(flash || null);
+
+    // Hapus flash message setelah 2 detik
+    useEffect(() => {
+        if (flashMessage) {
+            const timer = setTimeout(() => {
+                setFlashMessage(null);
+            }, 2000); // 2000ms = 2 detik
+
+            // Bersihkan timer saat komponen unmount atau flashMessage berubah
+            return () => clearTimeout(timer);
+        }
+    }, [flashMessage]);
 
     // Handler untuk hapus user
     const handleDelete = (id) => {
@@ -36,9 +48,8 @@ export default function DataUser() {
                 {/* Tampilkan flash message */}
                 {flashMessage && (
                     <div
-                        className={`mb-4 p-4 rounded ${
-                            flashMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                        }`}
+                        className={`mb-4 p-4 rounded ${flashMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                            }`}
                     >
                         {flashMessage.message}
                     </div>

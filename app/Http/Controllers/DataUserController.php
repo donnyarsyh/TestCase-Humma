@@ -23,10 +23,15 @@ class DataUserController extends Controller
         // Ambil semua user
         $users = User::select('id', 'name', 'email', 'role')->get();
 
-        return Inertia::render('DataUser', [
-            'user' => [
-                'name' => $user->name,
-            ],
+        // return Inertia::render('UserCopy', [
+        //     'user' => [
+        //         'name' => $user->name,
+        //     ],
+        //     'users' => $users,
+        // ]);
+
+        return Inertia::render('UserCopy', [
+            'user' => $user,
             'users' => $users,
         ]);
     }

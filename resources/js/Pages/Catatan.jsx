@@ -17,37 +17,34 @@ export default function Catatan() {
   const [sortKey, setSortKey] = useState('');
 
 
-const filteredCatatan = catatan.filter(
-  (item) =>
-    item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  const filteredCatatan = catatan.filter(
+    (item) =>
+      item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-// Urutkan catatan setelah disaring
-const sortedCatatan = [...filteredCatatan].sort((a, b) => {
-  if (sortKey === 'nama') return a.user_name.localeCompare(b.user_name);
-  if (sortKey === 'judul') return a.judul.localeCompare(b.judul);
-  return 0;
-});
-
+  // Urutkan catatan setelah disaring
+  const sortedCatatan = [...filteredCatatan].sort((a, b) => {
+    if (sortKey === 'nama') return a.user_name.localeCompare(b.user_name);
+    if (sortKey === 'judul') return a.judul.localeCompare(b.judul);
+    return 0;
+  });
 
   // Handler untuk perubahan input pencarian
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Menangani pesan flash
   useEffect(() => {
-    if (flash?.message || flash?.error) {
-      setFlashMessage({
-        type: flash.error ? 'error' : 'success',
-        message: flash.message || flash.error,
-      });
-      // Hilangkan pesan setelah 3 detik
-      const timer = setTimeout(() => setFlashMessage(null), 3000);
+    if (flashMessage) {
+      const timer = setTimeout(() => {
+        setFlashMessage(null);
+      }, 2000); // 2000ms = 2 detik
+
+      // Bersihkan timer saat komponen unmount atau flashMessage berubah
       return () => clearTimeout(timer);
     }
-  }, [flash]);
+  }, [flashMessage]);
 
   // Fungsi untuk menghapus catatan
   const handleDelete = (idcatatan) => {
@@ -73,9 +70,8 @@ const sortedCatatan = [...filteredCatatan].sort((a, b) => {
         {/* Flash Message */}
         {flashMessage && (
           <div
-            className={`fixed top-4 right-4 p-4 rounded shadow-lg text-white ${
-              flashMessage.type === 'success' ? 'bg-green-600' : 'bg-red-600'
-            }`}
+            className={`mb-4 p-4 rounded ${flashMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              }`}
           >
             {flashMessage.message}
           </div>

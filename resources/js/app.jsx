@@ -1,6 +1,8 @@
 import "../css/styles/Tombol.css";
 import '../css/styles/Tabel.css';
 import '../css/styles/Background.css';
+import '../css/styles/Navbar.css';
+import '../css/styles/PopUp.css'
 
 import '../css/app.css';
 import './bootstrap';

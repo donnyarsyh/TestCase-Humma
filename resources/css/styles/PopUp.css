@@ -1,0 +1,23 @@
+.bg_popup{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    width: 300px;
+    height: fit-content;
+    background-color: #ffffff;
+    padding: 30px 10px 10px 10px;
+    align-items: center;
+}
+
+.popup_berhasil{
+    margin: auto;
+    width: 60px;
+}
+
+.teks_popup{
+    font-family: poppins;
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    padding-top: 20px;
+}

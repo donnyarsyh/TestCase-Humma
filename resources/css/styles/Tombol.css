@@ -80,9 +80,33 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);;
 }
 
-.filter{
-  padding: 5px;
-  background-color: #ffffff;
-  outline: 1px;
-  outline-color: #000000;
+.cari {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  background-color: #f0f0f0;
+  padding: 10px;
 }
+
+.masukan_cari {
+  padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  width: 250px;
+}
+
+.tombol_berhasil{
+  padding: 7px 50px 7px 50px;
+  background-color: #5DB338;
+  color: #ffffff;
+  font-family: poppins;
+  font-weight: bold;
+  font-size:small ;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+

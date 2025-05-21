@@ -38,9 +38,9 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
+    <nav className="sticky top-0 z-50 bg-white shadow-md px-5 py-3">
       <div
-        className="flex items-center justify-between px-6 py-3"
+        className="flex items-center justify-between px-6 py-3 relative"
         style={{ borderBottomColor: '#27548A' }}
       >
         {/* Logo */}
@@ -74,9 +74,9 @@ export default function Navbar() {
 
         {/* Menu Utama untuk Desktop */}
         <div
-          className="hidden md:flex rounded-full px-4 py-2 shadow-lg gap-6 items-center"
-          style={{ backgroundColor: '#27548A' }}
-        >
+  className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 rounded-full px-4 py-2 shadow-lg  items-center mb-5 mt-5"
+  style={{ backgroundColor: '#27548A' }}
+>
           <button
             onClick={() => {
               setActive('catatan');
@@ -168,48 +168,3 @@ export default function Navbar() {
     </nav>
   );
 }
-/*import React from 'react';
-import '../../css/styles/Navbar.css';
-import '../../css/styles/Tombol.css';
-import { useNavigate, useLocation } from 'react-router-dom';
-import logo_desktop from '../../assets/Logo Aplikasi.svg';
-import logo_mobile from '../../assets/notepad 1.svg';
-import icon_keluar from '../../assets/sign-out-alt 1.svg';
-import icon_catatan from '../../assets/icon_project.svg';
-import icon_akun from '../../assets/user (5).svg';
-
-function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const isActive = (path) => location.pathname === path;
-
-  return (
-    <nav className="navbar">
-      <div className="logo">
-        <img src={logo_desktop} alt='Logo Desktop' className='logo-desktop'/>
-        <img src={logo_mobile} alt='Logo Mobile' className='logo-mobile'/>
-      </div>
-      <div className="center-buttons">
-      <div className='tombol_wrapper'>
-        <button className={`tombol_navbar ${isActive('/catatan') ? 'active' : ''}`}
-        onClick={() => navigate('/catatan')}>
-        <img src={icon_catatan} alt="Catatan" />
-        <span>Catatan</span>
-      </button>
-      <button className={`tombol_navbar ${isActive('/akun') ? 'active' : ''}`}
-        onClick={() => navigate('/akun')}>
-        <img src={icon_akun} alt="Akun" />
-        <span>Akun</span>
-      </button>
-      </div>
-      </div>
-      <div>
-        <button className="tombol_keluar" onClick={() => alert('Logout berhasil!')}><img src={icon_keluar} className="icon_keluar" /></button>
-      </div>
-    </nav>
-  );
-}
-
-export default Navbar;
-*/

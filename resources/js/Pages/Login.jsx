@@ -10,7 +10,7 @@ export default function Login() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const { errors } = usePage().props;
+  const { errors, login_success } = usePage().props;
 
   const handleChange = (e) => {
     setFormData({
@@ -30,7 +30,7 @@ export default function Login() {
     e.preventDefault();
     router.post('/login', formData, {
       onSuccess: () => {
-        setShowSuccess(true); // Tampilkan pop up saat login berhasil
+        setShowSuccess(true);
       },
       onError: (errors) => {
         console.log('Login gagal:', errors);
@@ -40,74 +40,83 @@ export default function Login() {
 
   const handlePopupClose = () => {
     setShowSuccess(false);
-    router.visit('/catatan'); // Arahkan ke dashboard
+    router.visit('/catatan');
   };
 
-  const { login_success } = usePage().props;
-
-useEffect(() => {
-  if (login_success) {
-    setShowSuccess(true);
-  }
-}, [login_success]);
-
+  useEffect(() => {
+    if (login_success) {
+      setShowSuccess(true);
+    }
+  }, [login_success]);
 
   return (
-    <div className="flex h-screen relative">
-      {/* Ilustrasi Kiri */}
-      <div className="w-1/2 flex justify-center items-center" style={{ backgroundColor: '#27548A' }}>
-        <img src="/images/bg-login.png" alt="Ilustrasi Login" className="w-3/3" />
+    <div className="min-h-screen flex flex-col lg:flex-row relative bg-gray-100">
+      {/* Ilustrasi Kiri - Hanya tampil di desktop */}
+      <div className="hidden lg:flex lg:w-1/2 justify-center items-center bg-[#27548A] p-6">
+        <img
+          src="/images/bg-login.png"
+          alt="Ilustrasi Login"
+          className="w-full max-w-md h-auto object-cover"
+        />
       </div>
 
-      {/* Form Login Kanan */}
-      <div className="w-1/2 bg-blue-50 flex flex-col justify-center items-center">
-        <h2 className="text-3xl font-bold mb-6 text-[#27548A]">Login</h2>
+      {/* Form Login - Terpusat di mobile dan desktop */}
+      <div className="w-full lg:w-1/2 bg-blue-50 flex justify-center items-center min-h-screen lg:min-h-0 p-4 sm:p-6">
+        <div className="w-full max-w-sm sm:max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-[#27548A] text-center">
+            Login
+          </h2>
 
-        <form className="w-2/3 max-w-md" onSubmit={handleLogin}>
-          <div className="mb-4">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className={`w-full p-3 rounded border ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-            )}
-          </div>
+          <form onSubmit={handleLogin}>
+            <div className="mb-6">
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className={`w-full p-3 rounded border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300`}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
 
-          <div className="relative mb-2">
-            <input
-              type={formData.showPassword ? 'text' : 'password'}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className={`w-full p-3 rounded border ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            <span
-              className="absolute right-3 top-3 text-gray-500 cursor-pointer"
-              onClick={togglePassword}
+            <div className="relative mb-6">
+              <input
+                type={formData.showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`w-full p-3 rounded border ${
+                  errors.password ? 'border-red-500' : 'border-gray-300'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 pr-10`}
+              />
+              <span
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                onClick={togglePassword}
+              >
+                <i className={formData.showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+              </span>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-[#DDA853] hover:bg-[#E79A1E] text-white p-3 rounded font-bold transition duration-300 transform hover:-translate-y-1"
             >
-              {formData.showPassword ? '🙈' : '👁️'}
-            </span>
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="mt-4 w-full bg-[#DDA853] hover:bg-[#E79A1E] text-white p-3 rounded font-bold transition"
-          >
-            Masuk
-          </button>
-        </form>
+              Masuk
+            </button>
+          </form>
+        </div>
       </div>
 
-      {/* ✅ Tampilkan popup berhasil jika login sukses */}
+      {/* Popup Sukses */}
       {showSuccess && (
         <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
           <AlertBerhasil onClose={handlePopupClose} />

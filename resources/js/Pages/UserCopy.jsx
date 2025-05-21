@@ -91,8 +91,8 @@ export default function DataUser() {
         </div>
 
         {/* Tabel */}
-        <div className="wrapper_tabel overflow-x-auto">
-          <table className="tabel_pengguna min-w-full bg-white">
+        <div className="wrapper_tabel">
+          <table className="tabel_pengguna  bg-white">
             <thead>
               <tr>
                 <th>No.</th>

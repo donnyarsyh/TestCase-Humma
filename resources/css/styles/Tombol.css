@@ -1,12 +1,32 @@
 .tombol_hapus{
-    border-radius: 5px;
+    border-radius: 10px;
     border: none;
-    padding: 7px;
-    background-color: #FF3D2B;
+    padding: 7px 15px 7px 15px;
+    margin-left: 5px;
+    background-color: #DC2626;
     color: #ffffff;
+    font-weight: bold;
 }
 
 .text_hapus{
+  color: #ffffff;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  font-family: poppins;
+}
+
+.tombol_detail{
+    border-radius: 10px;
+    border: none;
+    padding: 7px 15px 7px 15px;
+    margin-right: 5px;
+    background-color: #16A34A;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.text_detail{
   color: #ffffff;
   align-items: center;
   justify-content: center;

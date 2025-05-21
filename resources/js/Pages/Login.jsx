@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { router, usePage } from '@inertiajs/react';
+import AlertBerhasil from '../Components/AlertBerhasil'; // Pastikan path-nya sesuai
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -7,6 +8,8 @@ export default function Login() {
     password: '',
     showPassword: false,
   });
+
+  const [showSuccess, setShowSuccess] = useState(false);
   const { errors } = usePage().props;
 
   const handleChange = (e) => {
@@ -26,20 +29,37 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     router.post('/login', formData, {
-    onError: (errors) => {
+      onSuccess: () => {
+        setShowSuccess(true); // Tampilkan pop up saat login berhasil
+      },
+      onError: (errors) => {
         console.log('Login gagal:', errors);
       },
     });
   };
 
+  const handlePopupClose = () => {
+    setShowSuccess(false);
+    router.visit('/catatan'); // Arahkan ke dashboard
+  };
+
+  const { login_success } = usePage().props;
+
+useEffect(() => {
+  if (login_success) {
+    setShowSuccess(true);
+  }
+}, [login_success]);
+
+
   return (
-    <div className="flex h-screen">
-      {/* Kiri: Ilustrasi */}
+    <div className="flex h-screen relative">
+      {/* Ilustrasi Kiri */}
       <div className="w-1/2 flex justify-center items-center" style={{ backgroundColor: '#27548A' }}>
         <img src="/images/bg-login.png" alt="Ilustrasi Login" className="w-3/3" />
       </div>
 
-      {/* Kanan: Form Login */}
+      {/* Form Login Kanan */}
       <div className="w-1/2 bg-blue-50 flex flex-col justify-center items-center">
         <h2 className="text-3xl font-bold mb-6 text-[#27548A]">Login</h2>
 
@@ -77,7 +97,7 @@ export default function Login() {
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
-          
+
           <button
             type="submit"
             className="mt-4 w-full bg-[#DDA853] hover:bg-[#E79A1E] text-white p-3 rounded font-bold transition"
@@ -86,6 +106,13 @@ export default function Login() {
           </button>
         </form>
       </div>
+
+      {/* ✅ Tampilkan popup berhasil jika login sukses */}
+      {showSuccess && (
+        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
+          <AlertBerhasil onClose={handlePopupClose} />
+        </div>
+      )}
     </div>
   );
 }

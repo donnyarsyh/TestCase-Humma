@@ -31,7 +31,7 @@ class LoginController extends Controller
         if ($this->authService->attemptLogin($credentials)) {
             if ($this->authService->isAdmin()) {
                 $request->session()->regenerate();
-                return Inertia::location(route('catatan'));
+                return Redirect::back()->with('login_success', true);
             }
 
             $this->authService->logout($request);

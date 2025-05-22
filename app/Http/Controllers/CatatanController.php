@@ -18,11 +18,13 @@ class CatatanController extends Controller
         $this->catatanService = $catatanService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
-        $catatan = $this->catatanService->getAllWithUser();
+        // $catatan = $this->catatanService->getAllWithUser();
+        $perPage = $request->input('per_page', 3); // default 10
+        $catatan = $this->catatanService->getPaginatedCatatan($perPage);
 
         return Inertia::render('Catatan', [
             'user' => [

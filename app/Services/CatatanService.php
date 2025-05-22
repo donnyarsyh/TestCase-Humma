@@ -29,4 +29,11 @@ class CatatanService
         $catatan = Catatan::where('idcatatan', $idcatatan)->firstOrFail();
         $catatan->delete();
     }
+
+    public function getPaginatedCatatan($perPage = 1)
+    {
+        return Catatan::select('catatan.idcatatan', 'catatan.judul', 'catatan.deskripsi', 'catatan.tgl', 'users.name as user_name')
+            ->join('users', 'catatan.user_id', '=', 'users.id') // atau sesuaikan foreign key-nya
+            ->paginate($perPage);
+    }
 }

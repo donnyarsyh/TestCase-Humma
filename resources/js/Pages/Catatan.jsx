@@ -14,7 +14,13 @@ export default function Catatan() {
   const [sortKey, setSortKey] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(null);
-  
+
+  const handlePagination = (url) => {
+    if (url) {
+      router.visit(url);
+    }
+  };
+
   useEffect(() => {
     if (flashMessage) {
       const timer = setTimeout(() => {
@@ -23,29 +29,29 @@ export default function Catatan() {
       return () => clearTimeout(timer);
     }
   }, [flashMessage]);
-  
-  const handleDelete = (idcatatan) => {
-  setCatatanIdToDelete(idcatatan);
-  setConfirmingDelete(true);
-};
 
-const confirmDelete = () => {
-  router.delete(route('catatan.destroy', catatanIdToDelete), {
-    onSuccess: () => {
-      setFlashMessage({ type: 'success', message: 'Catatan berhasil dihapus' });
-      setConfirmingDelete(false);
-    },
-    onError: (errors) => {
-      setFlashMessage({
-        type: 'error',
-        message: errors.message || 'Gagal menghapus catatan.',
-      });
-    },
-  });
-};
+  const handleDelete = (idcatatan) => {
+    setCatatanIdToDelete(idcatatan);
+    setConfirmingDelete(true);
+  };
+
+  const confirmDelete = () => {
+    router.delete(route('catatan.destroy', catatanIdToDelete), {
+      onSuccess: () => {
+        setFlashMessage({ type: 'success', message: 'Catatan berhasil dihapus' });
+        setConfirmingDelete(false);
+      },
+      onError: (errors) => {
+        setFlashMessage({
+          type: 'error',
+          message: errors.message || 'Gagal menghapus catatan.',
+        });
+      },
+    });
+  };
 
   // Filter dan sort
-  const filteredCatatan = catatan.filter(
+  const filteredCatatan = catatan.data.filter(
     (item) =>
       item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -71,16 +77,15 @@ const confirmDelete = () => {
         {/* Flash Message */}
         {flashMessage && (
           <div
-            className={`mb-4 p-4 rounded ${
-              flashMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-            }`}
+            className={`mb-4 p-4 rounded ${flashMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              }`}
           >
             {flashMessage.message}
           </div>
         )}
 
         <div className="flex justify-between mb-3">
-          <div></div> 
+          <div></div>
           <div className="flex items-center gap-3 ml-auto">
             <select
               value={sortKey}
@@ -116,7 +121,8 @@ const confirmDelete = () => {
               {sortedCatatan.length > 0 ? (
                 sortedCatatan.map((item, index) => (
                   <tr key={item.idcatatan}>
-                    <td>{index + 1}</td>
+                    {/* <td>{index + 1}</td> */}
+                    <td>{(catatan.current_page - 1) * catatan.per_page + index + 1}</td>
                     <td>{item.user_name}</td>
                     <td>{item.judul}</td>
                     <td>
@@ -139,6 +145,18 @@ const confirmDelete = () => {
               )}
             </tbody>
           </table>
+          {/* Pagination Links */}
+          <div className="flex gap-2 justify-end mt-4">
+            {catatan.links.map((link, index) => (
+              <button
+                key={index}
+                disabled={!link.url}
+                onClick={() => handlePagination(link.url)}
+                dangerouslySetInnerHTML={{ __html: link.label }}
+                className={`px-3 py-1 border rounded-xl ${link.active ? 'bg-[#DDA853] text-white' : 'bg-white'}`}
+              />
+            ))}
+          </div>
         </div>
         {showPopup && (
           <CatatanDetailPopup
@@ -147,17 +165,17 @@ const confirmDelete = () => {
           />
         )}
         {confirmingDelete && (
-        <div
-          className="fixed inset-0 flex justify-center items-center 
+          <div
+            className="fixed inset-0 flex justify-center items-center 
                      bg-black bg-opacity-40 z-50"
-        >
-          <ConfirmHapusCatatan
-            visible={confirmingDelete}
-            onConfirm={confirmDelete}
-            onCancel={() => setConfirmingDelete(false)}
-          />
-        </div>
-      )}
+          >
+            <ConfirmHapusCatatan
+              visible={confirmingDelete}
+              onConfirm={confirmDelete}
+              onCancel={() => setConfirmingDelete(false)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

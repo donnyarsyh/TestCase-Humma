@@ -3,46 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DataUserController extends Controller
 {
-    //
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function index()
     {
         $user = Auth::user();
 
-        // Cek otorisasi: hanya admin yang bisa melihat daftar user
-        if ($user->role !== 'admin') {
-            // Log::warning('Unauthorized access to user list:', ['user_id' => $user->id]);
-            return redirect()->route('catatan')->with('error', 'Anda tidak memiliki izin untuk melihat daftar pengguna.');
+        if (!$this->authService->isAdmin()) {
+            return redirect()->route('catatan')
+                ->with('error', 'Anda tidak memiliki izin untuk melihat daftar pengguna.');
         }
 
-        // Ambil semua user
-        $users = User::select('id', 'name', 'email', 'role')->get();
-
-        // return Inertia::render('UserCopy', [
-        //     'user' => [
-        //         'name' => $user->name,
-        //     ],
-        //     'users' => $users,
-        // ]);
+        $users = $this->authService->getNonAdminUsers();
 
         return Inertia::render('UserCopy', [
             'user' => $user,
             'users' => $users,
         ]);
     }
-
     public function destroy($id)
     {
-        $user = Auth::user();
-        if ($user->role !== 'admin') {
-            return redirect()->back()->with('error', 'Anda tidak memiliki izin.');
+        $result = $this->authService->deleteUser($id);
+
+        if (!$result['success']) {
+            return redirect()->back()->with('error', $result['message']);
         }
-        User::findOrFail($id)->delete();
-        return redirect()->route('datauser')->with('message', 'Pengguna berhasil dihapus.');
+
+        return redirect()->route('datauser')->with('message', $result['message']);
     }
 }

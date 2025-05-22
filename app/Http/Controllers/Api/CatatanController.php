@@ -45,6 +45,45 @@ class CatatanController extends Controller
         ], 201);
     }
 
+    // Fungsi update ditambahkan di sini
+    public function update(Request $request, $id)
+    {
+        $catatan = Catatan::find($id);
+
+        if (!$catatan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Catatan tidak ditemukan',
+            ], 404);
+        }
+
+        // Validasi data update
+        $validated = $request->validate([
+            'user_id'   => 'required|integer|exists:users,id',
+            'judul'     => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'tgl'       => 'required|date',
+            'gambar'    => 'nullable|string',
+        ]);
+
+        // Update data catatan
+        $catatan->user_id = $validated['user_id'];
+        $catatan->judul = $validated['judul'];
+        $catatan->deskripsi = $validated['deskripsi'];
+        $catatan->tgl = $validated['tgl'];
+        if (isset($validated['gambar'])) {
+            $catatan->gambar = $validated['gambar'];
+        }
+
+        $catatan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Catatan berhasil diperbarui',
+            'data'    => $catatan,
+        ], 200);
+    }
+
     public function uploadGambar(Request $request)
     {
         $request->validate([
@@ -62,7 +101,7 @@ class CatatanController extends Controller
         $relativePath = $path . '/' . $fileName;
         $publicUrl = asset('storage/' . $relativePath);
 
-        $catatan = \App\Models\Catatan::where('user_id', $userId)->latest()->first();
+        $catatan = Catatan::where('user_id', $userId)->latest()->first();
 
         if ($catatan) {
             $catatan->gambar = $relativePath;
@@ -89,7 +128,6 @@ class CatatanController extends Controller
             ], 404);
         }
 
-        // Hapus file gambar jika ada
         if ($catatan->gambar) {
             $filePath = storage_path('app/public/' . $catatan->gambar);
             if (file_exists($filePath)) {
@@ -97,7 +135,6 @@ class CatatanController extends Controller
             }
         }
 
-        // Hapus data catatan
         $catatan->delete();
 
         return response()->json([

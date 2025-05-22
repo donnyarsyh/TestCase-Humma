@@ -4,22 +4,29 @@ import Navbar from '../Components/Navbar';
 import CatatanDetailPopup from './CatatanDetail';
 import ConfirmHapusCatatan from '../Components/ConfirmHapusCatatan';
 
-
 export default function Catatan() {
-  const { props } = usePage();
-  const { user, catatan, flash } = props;
+  const { user, catatan, filters, flash } = usePage().props;
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [catatanIdToDelete, setCatatanIdToDelete] = useState(null);
   const [flashMessage, setFlashMessage] = useState(flash || null);
-  const [sortKey, setSortKey] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [sortKey, setSortKey] = useState(filters.sort_by || '');
   const [showPopup, setShowPopup] = useState(null);
 
   const handlePagination = (url) => {
     if (url) {
-      router.visit(url);
+      router.visit(url, {
+        preserveState: true,
+        preserveScroll: true,
+      });
     }
   };
+
+  useEffect(() => {
+    if (flash) {
+      setFlashMessage(flash);
+    }
+  }, [flash]);
 
   useEffect(() => {
     if (flashMessage) {
@@ -50,21 +57,39 @@ export default function Catatan() {
     });
   };
 
-  // Filter dan sort
-  const filteredCatatan = catatan.data.filter(
-    (item) =>
-      item.judul.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.user_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const sortedCatatan = [...filteredCatatan].sort((a, b) => {
-    if (sortKey === 'nama') return a.user_name.localeCompare(b.user_name);
-    if (sortKey === 'judul') return a.judul.localeCompare(b.judul);
-    return 0;
-  });
-
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    const value = e.target.value;
+    setSearchTerm(value);
+    router.get(route('catatan'), {
+      search: value,
+      sort_by: sortKey,
+    }, {
+      preserveState: true,
+      replace: true,
+    });
+  };
+
+  const handleSortChange = (e) => {
+    const newSort = e.target.value;
+    setSortKey(newSort);
+    router.get(route('catatan'), {
+      search: searchTerm,
+      sort_by: newSort,
+    }, {
+      preserveState: true,
+      replace: true,
+    });
+  };
+
+  const handleReset = () => {
+    setSearchTerm('');
+    setSortKey('');
+    router.get(route('catatan'), {
+      t: new Date().getTime(), // tambahkan timestamp agar selalu dianggap permintaan baru
+    }, {
+      preserveState: true,
+      replace: true,
+    });
   };
 
   return (
@@ -87,28 +112,34 @@ export default function Catatan() {
         <div className="flex justify-between mb-3">
           <div></div>
           <div className="flex items-center gap-3 ml-auto">
+
+            <input
+              type="text"
+              placeholder="Cari catatan..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="border rounded px-4 py-2 w-64"
+            />
             <select
               value={sortKey}
-              onChange={(e) => setSortKey(e.target.value)}
+              onChange={handleSortChange}
               className="border rounded px-3 py-2 text-sm w-44"
             >
               <option value="">Urutkan</option>
               <option value="nama">Nama A - Z</option>
               <option value="judul">Judul A - Z</option>
             </select>
-            <input
-              type="text"
-              placeholder="Cari catatan..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded px-4 py-2 w-64"
-            />
+            <button
+              onClick={handleReset}
+              className="bg-gray-200 hover:bg-gray-300 px-3 py-2 rounded text-sm"
+            >
+              Reset
+            </button>
           </div>
         </div>
 
-        {/* Tabel */}
         <div className="wrapper_tabel">
-          <table className="tabel_pengguna  bg-white">
+          <table className="tabel_pengguna bg-white">
             <thead>
               <tr>
                 <th>No.</th>
@@ -118,19 +149,23 @@ export default function Catatan() {
               </tr>
             </thead>
             <tbody>
-              {sortedCatatan.length > 0 ? (
-                sortedCatatan.map((item, index) => (
+              {catatan.data.length > 0 ? (
+                catatan.data.map((item, index) => (
                   <tr key={item.idcatatan}>
-                    {/* <td>{index + 1}</td> */}
                     <td>{(catatan.current_page - 1) * catatan.per_page + index + 1}</td>
                     <td>{item.user_name}</td>
                     <td>{item.judul}</td>
                     <td>
                       <button
-                        onClick={() => setShowPopup(item)} className="tombol_detail"
-                      >Detail
+                        onClick={() => setShowPopup(item)}
+                        className="tombol_detail"
+                      >
+                        Detail
                       </button>
-                      <button onClick={() => handleDelete(item.idcatatan)} className="tombol_hapus">
+                      <button
+                        onClick={() => handleDelete(item.idcatatan)}
+                        className="tombol_hapus"
+                      >
                         <span className="hapus">Hapus</span>
                       </button>
                     </td>
@@ -138,14 +173,15 @@ export default function Catatan() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center text-sm text-gray-500">
+                  <td colSpan="4" className="text-center text-sm text-gray-500">
                     Belum ada catatan yang cocok.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          {/* Pagination Links */}
+
+          {/* Pagination */}
           <div className="flex gap-2 justify-end mt-4">
             {catatan.links.map((link, index) => (
               <button
@@ -158,17 +194,16 @@ export default function Catatan() {
             ))}
           </div>
         </div>
+
         {showPopup && (
           <CatatanDetailPopup
             catatan={showPopup}
             onClose={() => setShowPopup(null)}
           />
         )}
+
         {confirmingDelete && (
-          <div
-            className="fixed inset-0 flex justify-center items-center 
-                     bg-black bg-opacity-40 z-50"
-          >
+          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
             <ConfirmHapusCatatan
               visible={confirmingDelete}
               onConfirm={confirmDelete}

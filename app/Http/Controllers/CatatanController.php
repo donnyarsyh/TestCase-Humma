@@ -22,15 +22,23 @@ class CatatanController extends Controller
     {
         $user = Auth::user();
 
-        // $catatan = $this->catatanService->getAllWithUser();
-        $perPage = $request->input('per_page', 3); // default 10
-        $catatan = $this->catatanService->getPaginatedCatatan($perPage);
+        $perPage = $request->input('per_page', 5);
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by');
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        $catatan = $this->catatanService->getPaginatedCatatan($perPage, $search, $sortBy, $sortOrder);
 
         return Inertia::render('Catatan', [
             'user' => [
                 'name' => $user->name,
             ],
             'catatan' => $catatan,
+            'filters' => [
+                'search' => $search,
+                'sort_by' => $sortBy,
+                'sort_order' => $sortOrder,
+            ],
         ]);
     }
 

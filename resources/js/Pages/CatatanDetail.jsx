@@ -1,6 +1,19 @@
 import { X } from 'lucide-react';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 
 export default function CatatanDetailPopup({ catatan, onClose }) {
+  // Konversi Delta ke HTML
+  let deskripsiHTML = '';
+  try {
+    const deltaOps = JSON.parse(catatan.deskripsi); // parsing delta JSON
+    const converter = new QuillDeltaToHtmlConverter(deltaOps, {
+      inlineStyles: true,
+    });
+    deskripsiHTML = converter.convert();
+  } catch (e) {
+    deskripsiHTML = '<p>Tidak ada deskripsi yang bisa ditampilkan.</p>';
+  }
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-hidden">
       <div className="bg-white rounded-xl shadow-lg w-[90%] md:w-[900px] h-[500px] flex relative">
@@ -34,10 +47,10 @@ export default function CatatanDetailPopup({ catatan, onClose }) {
             <X size={24} />
           </button>
           <h2 className="text-lg font-bold mb-4">{catatan.judul || 'Tidak ada judul'}</h2>
-          <p className="text-sm text-gray-700 leading-relaxed">
+          <div className="text-sm text-gray-700 leading-relaxed">
             <strong>Deskripsi</strong><br />
-            {catatan.deskripsi || 'Tidak ada deskripsi'}
-          </p>
+            <div dangerouslySetInnerHTML={{ __html: deskripsiHTML }} />
+          </div>
         </div>
       </div>
     </div>

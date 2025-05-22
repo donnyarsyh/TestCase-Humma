@@ -118,16 +118,43 @@
 }
 
 .tombol_berhasil{
-  padding: 7px 50px 7px 50px;
-  background-color: #5DB338;
-  color: #ffffff;
+  padding: 7px 25px 7px 25px;
+  background-color: #D9D9D9;
+  color: #7B7B7B;
   font-family: poppins;
-  font-weight: bold;
   font-size:small ;
   border-radius: 10px;
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin: 5px 5px 2px 0px;
   cursor: pointer;
+  width: fit-content;
+  align-self:end;
+  justify-self: end;
+}
+
+.tombol_berhasil:hover{
+  background-color: #16A34A;
+  color: #ffffff;
+}
+
+.tombol_hapusdankeluar{
+  padding: 7px 25px 7px 25px;
+  background-color: #D9D9D9;
+  color: #7B7B7B;
+  font-family: poppins;
+  font-size:small ;
+  border-radius: 10px;
+  margin: 5px 5px 2px 0px;
+  cursor: pointer;
+}
+
+.tombol_hapusdankeluar:hover{
+  background-color: #DC2626;
+  color: #ffffff;
+}
+
+.hapusdankeluarwrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
 }
 

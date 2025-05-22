@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { router, usePage } from '@inertiajs/react';
 import '../../css/styles/Navbar.css';
+import ConfirmKeluar from './ConfirmKeluar';
 import logo_desktop from '../../assets/Logo Aplikasi.svg';
 import logo_mobile from '../../assets/notepad 1.svg';
 
@@ -8,6 +9,8 @@ export default function Navbar() {
   const { url } = usePage();
   const [active, setActive] = useState('catatan');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [confirmingLogout, setConfirmingLogout] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Sinkronkan state active dengan URL saat ini
   useEffect(() => {
@@ -18,20 +21,22 @@ export default function Navbar() {
     }
   }, [url]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    if (window.confirm('Apakah Anda yakin ingin logout?')) {
-      router.post('/logout', {}, {
-        onSuccess: () => {
-          // Redirect ke halaman login akan ditangani oleh server
-        },
-        onError: (errors) => {
-          console.error('Gagal logout:', errors);
-          alert('Terjadi kesalahan saat logout. Silakan coba lagi.');
-        },
-      });
-    }
-  };
+const handleLogout = () => {
+  setConfirmingLogout(true);
+};
+
+  const confirmLogout = () => {
+  router.post('/logout', {}, {
+    onSuccess: () => {
+      console.log("Logout sukses");
+    },
+    onError: (errors) => {
+      console.error('Gagal logout:', errors);
+      alert('Terjadi kesalahan saat logout. Silakan coba lagi.');
+    },
+  });
+};
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -163,8 +168,19 @@ export default function Navbar() {
             <img src="/images/logout.png" alt="Logout" className="w-5 h-5 object-contain" />
             Logout
           </button>
+          
         </div>
       )}
+      {confirmingLogout && (
+  <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
+    <ConfirmKeluar
+      visible={confirmingLogout}
+      onConfirm={confirmLogout}
+      onCancel={() => setConfirmingLogout(false)}
+    />
+  </div>
+)}
+
     </nav>
   );
 }

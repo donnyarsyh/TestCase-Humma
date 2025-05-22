@@ -54,6 +54,7 @@ useEffect(() => {
 
   return (
     <div className="flex h-screen relative">
+
       {/* Ilustrasi Kiri */}
       <div className="w-1/2 flex justify-center items-center" style={{ backgroundColor: '#27548A' }}>
         <img src="/images/bg-login.png" alt="Ilustrasi Login" className="w-3/3" />
@@ -112,6 +113,7 @@ useEffect(() => {
         <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50">
           <AlertBerhasil onClose={handlePopupClose} />
         </div>
+        
       )}
     </div>
   );

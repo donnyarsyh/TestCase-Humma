@@ -1,12 +1,13 @@
 .bg_popup{
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
-    width: 300px;
+    padding: 10px;
+    width: 400px;
     height: fit-content;
+    border-radius: 10px;
     background-color: #ffffff;
-    padding: 30px 10px 10px 10px;
-    align-items: center;
+    margin-top: -400px;
+    
 }
 
 .popup_berhasil{
@@ -16,8 +17,32 @@
 
 .teks_popup{
     font-family: poppins;
-    font-weight: bold;
-    font-size: large;
-    text-align: center;
-    padding-top: 20px;
+    font-weight: 500;
+    text-align:left;
+    padding-top: 10px;
+    margin-left: 5px;
+}
+
+.judul_popup_login{
+  padding: 7px 30px 7px 30px;
+  background-color: #16A34A;
+  color: #ffffff;
+  font-family: poppins;
+  font-weight: bold;
+  font-size:large ;
+  border-radius: 10px;
+  text-align: center;
+  margin: 2px 5px 2px 5px;
+}
+
+.judul_popup_hapus{
+  padding: 7px 30px 7px 30px;
+  background-color: #DC2626;
+  color: #ffffff;
+  font-family: poppins;
+  font-weight: bold;
+  font-size:large ;
+  border-radius: 10px;
+  text-align: center;
+  margin: 2px 5px 2px 5px;
 }

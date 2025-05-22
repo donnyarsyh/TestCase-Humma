@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { usePage, router } from '@inertiajs/react';
 import Navbar from '../Components/Navbar';
 import CatatanDetailPopup from './CatatanDetail';
+import ConfirmHapusCatatan from '../Components/ConfirmHapusCatatan';
+
 
 export default function Catatan() {
   const { props } = usePage();
   const { user, catatan, flash } = props;
-  
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [catatanIdToDelete, setCatatanIdToDelete] = useState(null);
   const [flashMessage, setFlashMessage] = useState(flash || null);
   const [sortKey, setSortKey] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,20 +25,24 @@ export default function Catatan() {
   }, [flashMessage]);
   
   const handleDelete = (idcatatan) => {
-    if (confirm('Are you sure you want to delete this catatan?')) {
-      router.delete(route('catatan.destroy', idcatatan), {
-        onSuccess: () => {
-          setFlashMessage({ type: 'success', message: 'Catatan berhasil dihapus' });
-        },
-        onError: (errors) => {
-          setFlashMessage({
-            type: 'error',
-            message: errors.message || 'Gagal menghapus catatan.',
-          });
-        },
+  setCatatanIdToDelete(idcatatan);
+  setConfirmingDelete(true);
+};
+
+const confirmDelete = () => {
+  router.delete(route('catatan.destroy', catatanIdToDelete), {
+    onSuccess: () => {
+      setFlashMessage({ type: 'success', message: 'Catatan berhasil dihapus' });
+      setConfirmingDelete(false);
+    },
+    onError: (errors) => {
+      setFlashMessage({
+        type: 'error',
+        message: errors.message || 'Gagal menghapus catatan.',
       });
-    }
-  };
+    },
+  });
+};
 
   // Filter dan sort
   const filteredCatatan = catatan.filter(
@@ -139,6 +146,18 @@ export default function Catatan() {
             onClose={() => setShowPopup(null)}
           />
         )}
+        {confirmingDelete && (
+        <div
+          className="fixed inset-0 flex justify-center items-center 
+                     bg-black bg-opacity-40 z-50"
+        >
+          <ConfirmHapusCatatan
+            visible={confirmingDelete}
+            onConfirm={confirmDelete}
+            onCancel={() => setConfirmingDelete(false)}
+          />
+        </div>
+      )}
       </div>
     </div>
   );

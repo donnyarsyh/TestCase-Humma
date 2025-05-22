@@ -53,7 +53,7 @@ const confirmDelete = () => {
 
   const sortedCatatan = [...filteredCatatan].sort((a, b) => {
     if (sortKey === 'nama') return a.user_name.localeCompare(b.user_name);
-    if (sortKey === 'judul') return a.judul.localeCompare.localeCompare(b.judul);
+    if (sortKey === 'judul') return a.judul.localeCompare(b.judul);
     return 0;
   });
 

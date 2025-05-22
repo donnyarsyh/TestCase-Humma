@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/catatan/{user_id}', [CatatanController::class, 'index']);
 Route::post('/upload_gambar', [CatatanController::class, 'uploadGambar']);
 Route::delete('catatan/{id}', [CatatanController::class, 'destroy']);
+Route::put('/catatan/{id}', [CatatanController::class, 'update']);
 Route::middleware('auth:sanctum')->put('/update', [AuthController::class, 'updateProfile']);
 Route::post('/update-password', [AuthController::class, 'updatePassword']);
 Route::get('/check-hint', [AuthController::class, 'check']);
